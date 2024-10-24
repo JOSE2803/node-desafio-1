@@ -1,9 +1,9 @@
 import { router } from "./router.js"
 
-export async function handlingRequest(req) {
+export async function handlingRequest(req, res) {
     await bodyRequest(req)
     await queryParamsRequest(req)
-    const routeMatched = await routeParamsRequest(req)
+    const routeMatched = await routeParamsRequest(req, res)
 
     return routeMatched
 }
@@ -38,7 +38,7 @@ async function queryParamsRequest(req) {
     req.query = queryObject
 }
 
-async function routeParamsRequest(req) {
+async function routeParamsRequest(req, res) {
 
     const { url, method } = req
 
@@ -68,7 +68,7 @@ async function routeParamsRequest(req) {
         return params        
     }
 
-    const routes = router()
+    const routes = await router(req, res)
 
     for (const route of routes) {
         const params = matchRoute(route.url, path)

@@ -5,14 +5,11 @@ import { handlingRequest } from "./handlingRequest.js"
 const port = 3001
 const server = http.createServer(async (req, res) => {
 
-    const routeMatched = await handlingRequest(req)
+    const routeMatched = await handlingRequest(req, res)
 
-    if (routeMatched) {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(req.body))
-    } else {
+    if (!routeMatched) {
         res.writeHead(404, { "Content-Type": "application/json" });
-        res.end()
+        res.end(JSON.stringify({ message: "Recurso não encontrado."}))
     }
 })
 
